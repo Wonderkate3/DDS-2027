@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Схема размещения средств ноябрь 2026 - март 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* layout: one row per step - source on the left, money bands in the middle, destinations on the right */
+  --bg:#f6f7f5; --card:#ffffff; --ink:#1d2421; --muted:#66706b; --line:#dfe3e0;
+  --in:#13836f; --in-soft:#e2f3ee;
+  --dep:#4b45b5; --dep-soft:#eceafd;
+  --out:#7a7470; --out-soft:#efedea;
+  --pool:#b7740f; --pool-soft:#fbf0dc;
+  --bad:#b3261e;
+  --display:"Manrope","IBM Plex Sans",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141917; --card:#1d2421; --ink:#e8ece9; --muted:#9aa49f; --line:#323b37;
+  --in:#4cc7ae; --in-soft:#173a33; --dep:#9f99f5; --dep-soft:#29275a;
+  --out:#b3ada8; --out-soft:#2c2a28; --pool:#e6a94a; --pool-soft:#3d2f17; --bad:#f2847c; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#141917; --card:#1d2421; --ink:#e8ece9; --muted:#9aa49f; --line:#323b37;
+  --in:#4cc7ae; --in-soft:#173a33; --dep:#9f99f5; --dep-soft:#29275a;
+  --out:#b3ada8; --out-soft:#2c2a28; --pool:#e6a94a; --pool-soft:#3d2f17; --bad:#f2847c; color-scheme:dark;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 48px}
+h1{font:700 26px/1.2 var(--display);margin:0 0 6px;text-wrap:balance}
+.lede{color:var(--muted);margin:0 0 18px;max-width:75ch}
+.bar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:22px;font-size:13px;color:var(--muted)}
+.key{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:4px;display:inline-block;border:1.5px solid}
+.sw.in{background:var(--in-soft);border-color:var(--in)} .sw.dep{background:var(--dep-soft);border-color:var(--dep)}
+.sw.out{background:var(--out-soft);border-color:var(--out)} .sw.pool{background:var(--pool-soft);border-color:var(--pool);border-style:dashed}
+.edit-hint{border-bottom:1.5px dotted var(--ink);color:var(--ink)}
+[contenteditable]{outline:none;border-radius:4px} [contenteditable]:hover{background:rgba(127,127,127,.12)} [contenteditable]:focus{background:rgba(127,127,127,.18)}
+button{font:500 13px var(--body);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{border-color:var(--muted)} button:focus-visible,input:focus-visible{outline:2px solid var(--dep);outline-offset:2px}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:28px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tile.dep{border-left:4px solid var(--dep)} .tile.out{border-left:4px solid var(--out)} .tile.in{border-left:4px solid var(--in)}
+.tile .t{font-size:12.5px;color:var(--muted)} .tile .v{font:700 20px/1.25 var(--display);margin:2px 0} .tile .d{font-size:12.5px;color:var(--muted)}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;margin-bottom:14px}
+.step-h{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;align-items:baseline;margin-bottom:12px}
+.step-h h2{font:700 17px/1.3 var(--display);margin:0}
+.chk{font-size:12.5px;padding:2px 9px;border-radius:999px;background:var(--in-soft);color:var(--in);white-space:nowrap}
+.chk.bad{background:transparent;color:var(--bad);border:1px solid var(--bad)}
+.grid{display:grid;grid-template-columns:minmax(220px,300px) minmax(60px,1fr) minmax(240px,340px);align-items:center;position:relative}
+.col{display:flex;flex-direction:column;gap:10px;position:relative;z-index:1}
+svg.bands{position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:visible;pointer-events:none}
+.box{border:1.5px solid;border-radius:10px;padding:9px 12px;background:var(--card)}
+.box.in{border-color:var(--in);background:var(--in-soft)} .box.dep{border-color:var(--dep);background:var(--dep-soft)}
+.box.out{border-color:var(--out);background:var(--out-soft)} .box.pool{border-color:var(--pool);background:var(--pool-soft);border-style:dashed}
+.box .n{font-weight:600;font-size:14px}
+.box.in .n{color:var(--in)} .box.dep .n{color:var(--dep)} .box.out .n{color:var(--out)} .box.pool .n{color:var(--pool)}
+.box .s{font-size:12.5px;color:var(--muted)}
+.amt{font:700 18px/1.3 var(--display);display:flex;align-items:baseline;gap:4px}
+.amt input{font:inherit;color:inherit;background:transparent;border:0;border-bottom:1.5px dotted currentColor;padding:0;width:100%;min-width:0}
+.amt .auto{font:500 11px var(--body);color:var(--muted);margin-left:auto;white-space:nowrap}
+.dates{display:flex;gap:10px;font-size:12.5px;color:var(--muted);margin-top:4px;flex-wrap:wrap}
+.dates input{font:inherit;color:var(--ink);width:84px;background:transparent;border:0;border-bottom:1px dotted var(--muted);padding:0}
+.neg{color:var(--bad)!important}
+.term{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12.5px;color:var(--muted);margin-top:4px}
+.term input{font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1px dotted var(--muted);padding:0}
+.term .d{width:84px} .term .r{width:46px}
+.term b{color:var(--ink);font-weight:600}
+.warn{color:var(--bad);font-size:12.5px;margin-top:4px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.panel h2{font:700 17px/1.3 var(--display);margin:0 0 4px}
+.panel p{margin:0 0 12px;color:var(--muted);font-size:13px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px 16px}
+.pf{display:flex;flex-direction:column;gap:2px;font-size:12.5px;color:var(--muted)}
+.pf input{font:600 15px var(--body);color:var(--ink);background:transparent;border:0;border-bottom:1.5px dotted var(--ink);padding:2px 0}
+.pf .calc{font:600 15px var(--body);color:var(--ink);padding:2px 0}
+table.fx{width:100%;border-collapse:collapse;margin-top:14px;font-size:12.5px;color:var(--muted)}
+table.fx th{font-weight:500;text-align:left;border-bottom:1px solid var(--line);padding:4px 6px}
+table.fx td{padding:3px 6px;border-bottom:1px dashed var(--line);font-style:italic}
+table.fx td:nth-child(3),table.fx td:nth-child(4),table.fx th:nth-child(3),table.fx th:nth-child(4){text-align:right}
+.foot{color:var(--muted);font-size:12.5px;margin-top:20px;max-width:90ch}
+@media (max-width:760px){
+  .grid{grid-template-columns:1fr;gap:10px} svg.bands{display:none}
+  .col.targets::before{content:"куда идут деньги";font-size:12px;color:var(--muted)}
+}
+@media (prefers-reduced-motion:no-preference){ svg.bands path{transition:stroke-width .25s} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="steps"></div>
+  <section class="panel">
+    <h2 contenteditable="true" data-tid="ph">Расходы компании (ФХД) - оставляем только нужное</h2>
+    <p contenteditable="true" data-tid="pp">Проценты Rakbank переводим в AED на ENBD и каждый месяц кладем на короткий депозит до последнего рабочего дня месяца. Не хватает до марта - добираем из прибыли Алготории 15.01. Апрель и май до погашения Rakbank 18.06.2027 - тоже из прибыли Алготории. Остаток прибыли в марте идет к депозитам.</p>
+    <div class="pgrid">
+      <label class="pf"><span contenteditable="true" data-tid="pl-84561">Расходы ноябрь</span><input id="f-exp_nov" data-k="exp_nov" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-67760">Расходы декабрь</span><input id="f-exp_dec" data-k="exp_dec" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-15083">Расходы январь</span><input id="f-exp_jan" data-k="exp_jan" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-35076">Расходы февраль</span><input id="f-exp_feb" data-k="exp_feb" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-91701">Расходы март</span><input id="f-exp_mar" data-k="exp_mar" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-4035">Расходы апрель (бюджет)</span><input id="f-exp_apr" data-k="exp_apr" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-56448">Расходы май (бюджет)</span><input id="f-exp_may" data-k="exp_may" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-90387">Резерв ФХД</span><input id="f-reserve" data-k="reserve" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-72218">Налог на прибыль за 2026 год (оценка)</span><input id="f-tax" data-k="tax" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-92251">Остаток на счете ENBD AED 31.10.2026</span><input id="f-cash" data-k="cash" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-20823">Депозит ФХД AED 14 000 - выходит 30.11.2026</span><input id="f-fxd14" data-k="fxd14" inputmode="decimal"></label>
+      <label class="pf"><span contenteditable="true" data-tid="pl-51302">Ставка коротких депозитов ФХД, %</span><input id="f-fhd_rate" data-k="fhd_rate" inputmode="decimal"></label>
+    </div>
+    <div class="pgrid" style="margin-top:14px">
+      <div class="pf"><span contenteditable="true" data-tid="pc-72454">Есть до марта (остаток, депозит AED, проценты Rakbank)</span><span class="calc" id="a-fhd_have"></span></div>
+      <div class="pf"><span contenteditable="true" data-tid="pc-33832">Нужно ноябрь - март с резервом</span><span class="calc" id="a-fhd_need1"></span></div>
+      <div class="pf"><span contenteditable="true" data-tid="pc-17018">Разрыв до марта</span><span class="calc" id="a-fhd_gap"></span></div>
+      <div class="pf"><span contenteditable="true" data-tid="pc-66946">Закрываем из прибыли Алготории 15.01</span><span class="calc" id="a-fhd_gap_alg"></span></div>
+    </div>
+    <table class="fx" aria-label="Короткие депозиты ФХД">
+      <thead><tr><th contenteditable="true" data-tid="t1">Короткий депозит ФХД в AED</th><th contenteditable="true" data-tid="t2">Срок</th><th contenteditable="true" data-tid="t3">USD</th><th contenteditable="true" data-tid="t4">AED (3,67)</th></tr></thead>
+      <tbody id="fxrows"></tbody>
+    </table>
+  </section>
+</div>
+
+<script>
+const PLAN={
+  rak_total:2070000, rak_body:2000000, rak_aed:435.02, rak_m:"18.11.2026",
+  snb_total:10821717.98, snb_to_rak:8000000, snb_m:"07.12.2026", snb_c:"10.12.2026",
+  sg1_total:10443831.77, enbd1:10000000, sg1_m:"11.12.2026", sg1_c:"16.12.2026",
+  sg2_total:1051666.19, sg2_m:"17.12.2026", sg2_c:"22.12.2026",
+  alg_value:2383829.62, alg_fee:72711.78, alg_keep:2000000, alg_d:"15.01.2027",
+  qnb_total:9718401.29, div:1035120.17, tax:124163.05, enbd2:10000000, qnb_m:"08.03.2027", qnb_c:"16.03.2027",
+  rate:3.575,
+  rak2_to:"18.06.2027", rak2_rate:5.4, snb8_to:"18.06.2027", snb8_rate:5.4,
+  enbd1_to:"16.12.2027", enbd1_rate:3.575, enbd2_to:"16.03.2028", enbd2_rate:3.885,
+  delta_to:"16.03.2028", delta_rate:3.885, taxd_to:"28.09.2027", taxd_rate:4.0,
+  cash:1530.79, fxd14:3827.19, fhd_rate:4.0, exp_nov:10433.62, exp_dec:22674.27, exp_jan:13281.46, exp_feb:10098.36, exp_mar:17469.47, exp_apr:12659.05, exp_may:13404.90, reserve:4000
+};
+let S;
+try{S=Object.assign({},PLAN,JSON.parse(localStorage.getItem("bha-dds-scheme-v6")||"{}"))}catch(e){S=Object.assign({},PLAN)}
+const save=()=>{try{localStorage.setItem("bha-dds-scheme-v6",JSON.stringify(S))}catch(e){}};
+const fmt=v=>{const r=Math.round(v*100)/100;const [i,f]=Math.abs(r).toFixed(2).split(".");return (r<0?"-":"")+i.replace(/\B(?=(\d{3})+(?!\d))/g," ")+(f==="00"?"":","+f)};
+const mln=v=>(v/1e6).toFixed(2).replace(".",",")+" млн";
+const num=s=>{const v=parseFloat(String(s).replace(/\s/g,"").replace(",","."));return isNaN(v)?0:v};
+const pd=s=>{const m=/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/.exec(String(s).trim());return m?new Date(+m[3],m[2]-1,+m[1]):null};
+const days=(a,b)=>{const x=pd(a),y=pd(b);return x&&y?Math.round((y-x)/864e5):0};
+
+function calc(){
+  const c={};
+  c.rak_fhd=S.rak_total-S.rak_body-S.rak_aed;
+  c.snb_pool=S.snb_total-S.snb_to_rak;
+  c.sg1_pool=S.sg1_total-S.enbd1;
+  c.sg2_pool=S.sg2_total;
+  c.alg_profit=S.alg_value-S.alg_fee-S.alg_keep;
+  const p=Math.max(0,c.alg_profit);
+  c.fhd_have=S.cash+c.rak_fhd+S.fxd14;
+  c.fhd_need1=S.exp_nov+S.exp_dec+S.exp_jan+S.exp_feb+S.exp_mar+S.reserve;
+  c.fhd_gap=Math.max(0,c.fhd_need1-c.fhd_have);
+  c.fhd_next=S.exp_apr+S.exp_may;
+  c.tax_alg=Math.min(S.tax,p);
+  c.fhd_gap_alg=Math.min(p-c.tax_alg,c.fhd_gap);
+  c.fhd_next_alg=Math.min(p-c.tax_alg-c.fhd_gap_alg,c.fhd_next);
+  c.alg_pool=p-c.tax_alg-c.fhd_gap_alg-c.fhd_next_alg;
+  c.tax_qnb=S.tax-c.tax_alg;
+  c.fhd_qnb=(c.fhd_gap-c.fhd_gap_alg)+(c.fhd_next-c.fhd_next_alg);
+  const r=S.rate/100, int=(a,d)=>a*r*days(d,S.qnb_c)/360;
+  c.pool_int=int(c.snb_pool,S.snb_c)+int(c.sg1_pool,S.sg1_c)+int(c.sg2_pool,S.sg2_c)+int(c.alg_pool,S.alg_d);
+  c.pool=c.snb_pool+c.sg1_pool+c.sg2_pool+c.alg_pool+c.pool_int;
+  c.delta=S.qnb_total+c.pool-S.div-c.tax_qnb-c.fhd_qnb-S.enbd2;
+  c.rak10=S.rak_body+S.snb_to_rak;
+  const fr=S.fhd_rate/100, gi=(a,d)=>a*fr*d/360;
+  const L=[]; let carry;
+  let f=S.cash+c.rak_fhd-S.exp_nov; L.push(["18.11.2026","30.11.2026","1-е размещение - до последнего рабочего дня ноября",f,12]);
+  carry=f+gi(f,12)+S.fxd14-S.exp_dec; L.push(["30.11.2026","31.12.2026","2-е размещение - до последнего рабочего дня декабря",carry,31]);
+  const f2=carry; carry=f2+gi(f2,31)-S.exp_jan; L.push(["31.12.2026","29.01.2027","",carry,29]);
+  const fa=c.fhd_gap_alg+c.fhd_next_alg; L.push(["15.01.2027","29.01.2027","из прибыли Алготории",fa,14]);
+  const f3=carry; carry=f3+gi(f3,29)+fa+gi(fa,14)-S.exp_feb; L.push(["29.01.2027","26.02.2027","",carry,28]);
+  const f4=carry; carry=f4+gi(f4,28)+c.fhd_qnb-S.exp_mar; L.push(["26.02.2027","31.03.2027","",carry,33]);
+  const f5=carry; carry=f5+gi(f5,33)-S.exp_apr; L.push(["31.03.2027","30.04.2027","",carry,30]);
+  const f6=carry; carry=f6+gi(f6,30)-S.exp_may; L.push(["30.04.2027","31.05.2027","остаются резерв и расходы до 18.06",carry,31]);
+  c.fx=L; c.fhd_end=carry;
+  return c;
+}
+
+const STEPS=[
+ {h:"Шаг 1. 18 ноября - гасится Rakbank", src:[{k:"rak_total",n:"Rakbank, срочный депозит",s:"зачисление в тот же день",d:[["погашение","rak_m"]]}],
+  to:[{t:"dep",k:"rak_body",n:"Rakbank - 2 млн",s:"вместе с шагом 2 - 10 млн в Rakbank",term:{from:"rak_m",to:"rak2_to",rate:"rak2_rate",b:365}},
+      {t:"out",auto:"rak_fhd",n:"Проценты в AED на ENBD - ФХД",s:"ежемесячный короткий депозит, см. блок ФХД"},
+      {t:"out",k:"rak_aed",n:"Остается на счете Rakbank AED",s:"абонплата Rakbank до конца 2027 года"}]},
+ {h:"Шаг 2. 7 декабря - гасится ENBD-SNB", src:[{k:"snb_total",n:"ENBD-SNB, фидуциарный",s:"тело и проценты",d:[["погашение","snb_m"],["зачисление","snb_c"]]}],
+  to:[{t:"dep",k:"snb_to_rak",n:"В Rakbank",s:"с шагом 1 получается 10 млн",term:{from:"snb_c",to:"snb8_to",rate:"snb8_rate",b:365},warnRak:true},
+      {t:"pool",auto:"snb_pool",n:"Копим до марта",s:"короткий депозит ENBD до зачисления QNB"}]},
+ {h:"Шаг 3. 11 декабря - гасится ENBD-Singapore", src:[{k:"sg1_total",n:"ENBD-Singapore, фидуциарный",s:"тело и проценты",d:[["погашение","sg1_m"],["зачисление","sg1_c"]]}],
+  to:[{t:"dep",k:"enbd1",n:"ENBD-1",s:"первый депозит ENBD на 10 млн",term:{from:"sg1_c",to:"enbd1_to",rate:"enbd1_rate",b:360}},
+      {t:"pool",auto:"sg1_pool",n:"Копим до марта",s:"короткий депозит ENBD до зачисления QNB"}]},
+ {h:"Шаг 4. 17 декабря - гасится второй ENBD-Singapore", src:[{k:"sg2_total",n:"ENBD-Singapore, фидуциарный",s:"тело и проценты",d:[["погашение","sg2_m"],["зачисление","sg2_c"]]}],
+  to:[{t:"pool",auto:"sg2_pool",n:"Копим до марта",s:"короткий депозит ENBD до зачисления QNB"}]},
+ {h:"Шаг 5. 15 января - Алготория закрывает 2026 год", src:[{k:"alg_value",n:"Субсчет Алготории на OKX",s:"стоимость на 31.10.2026, уточнится на 31.12",d:[["дата","alg_d"]]}],
+  to:[{t:"out",k:"alg_fee",n:"Комиссия Алготории за 2026 год",s:"20% от прибыли сверх HWM"},
+      {t:"in",k:"alg_keep",n:"Остается в торговле",s:"неснижаемый остаток по договору"},
+      {t:"dep",auto:"tax_alg",n:"Налог за 2026 год - депозит в AED",s:"из прибыли, в марте из QNB не берем",term:{from:"alg_d",to:"taxd_to",rate:"taxd_rate",b:360}},
+      {t:"out",auto:"fhd_gap_alg",n:"ФХД - закрываем разрыв до марта",s:"расходы ноября - марта + резерв минус проценты Rakbank"},
+      {t:"out",auto:"fhd_next_alg",n:"ФХД апрель - май",s:"до погашения Rakbank 18.06.2027"},
+      {t:"pool",auto:"alg_pool",n:"Остаток прибыли - копим до марта",s:"короткий депозит ENBD в USD"}]},
+ {h:"Шаг 6. 8 марта - гасится ENBD-QNB, собираем ENBD-2", src:[{k:"qnb_total",n:"ENBD-QNB, фидуциарный",s:"тело и проценты",d:[["погашение","qnb_m"],["зачисление","qnb_c"]]},
+      {t:"pool",auto:"pool",n:"Накопленное с шагов 2-5",s:"с процентами",rate:true}],
+  to:[{t:"out",k:"div",n:"Дивиденды за 2025 год",s:"акционеру до 30.04.2027"},
+      {t:"out",auto:"tax_qnb",n:"Налог за 2026 год из QNB",s:"только если прибыли Алготории не хватит"},
+      {t:"out",auto:"fhd_qnb",n:"ФХД из QNB",s:"только если прибыли Алготории не хватит"},
+      {t:"dep",k:"enbd2",n:"ENBD-2",s:"второй депозит ENBD на 10 млн",term:{from:"qnb_c",to:"enbd2_to",rate:"enbd2_rate",b:360}},
+      {t:"dep",auto:"delta",n:"Дельта - средства сверх 10 + 10 млн",s:"отдельный депозит, по умолчанию погашение вместе с ENBD-2",term:{from:"qnb_c",to:"delta_to",rate:"delta_rate",b:360}}]}
+];
+
+const host=document.getElementById("steps");
+function amtField(item){
+  if(item.k) return `<div class="amt"><input id="f-${item.k}" data-k="${item.k}" inputmode="decimal" aria-label="${item.n}"></div>`;
+  return `<div class="amt"><span id="a-${item.auto}"></span></div>`;
+}
+STEPS.forEach((st,i)=>{
+  const el=document.createElement("section");el.className="step";
+  el.innerHTML=`<div class="step-h"><h2 contenteditable="true" data-tid="h-${i}">${st.h}</h2><span class="chk" id="chk-${i}"></span></div>
+  <div class="grid" id="g-${i}"><svg class="bands" aria-hidden="true"></svg>
+   <div class="col sources">${st.src.map((s,si)=>`<div class="box ${s.t||"in"}" data-role="src"><div class="n" contenteditable="true" data-tid="sn-${i}-${si}">${s.n}</div>${amtField(s)}<div class="s" contenteditable="true" data-tid="ss-${i}-${si}">${s.s}</div>
+     ${s.d?`<div class="dates">${s.d.map(([l,k])=>`<label>${l} <input id="f-${k}" data-k="${k}" data-date="1"></label>`).join("")}</div>`:""}
+     ${s.rate?`<div class="dates"><label>ставка, % <input id="f-rate" data-k="rate" inputmode="decimal" style="width:52px"></label></div>`:""}</div>`).join("")}</div>
+   <div></div>
+   <div class="col targets">${st.to.map((t,ti)=>`<div class="box ${t.t}" data-role="dst" data-type="${t.t}"><div class="n" contenteditable="true" data-tid="tn-${i}-${ti}">${t.n}</div>${amtField(t)}<div class="s" contenteditable="true" data-tid="ts-${i}-${ti}">${t.s}</div>${t.term?`<div class="term"><span>с <b id="from-${i}-${ti}"></b></span><label>до <input class="d" id="f-${t.term.to}" data-k="${t.term.to}" data-date="1"></label><label>ставка <input class="r" id="f-${t.term.rate}" data-k="${t.term.rate}" inputmode="decimal">%</label><span id="int-${i}-${ti}"></span></div>`:""}${t.warnRak?`<div class="warn" id="warnrak"></div>`:""}</div>`).join("")}</div>
+  </div>`;
+  host.appendChild(el);
+});
+
+function fill(){
+  document.querySelectorAll("input[data-k]").forEach(inp=>{
+    if(document.activeElement===inp) return;
+    const k=inp.dataset.k; inp.value=inp.dataset.date?S[k]:(/rate$/.test(k)?String(S[k]).replace(".",","):fmt(S[k]));
+  });
+}
+function update(){
+  const c=calc();
+  for(const k in c){const e=document.getElementById("a-"+k); if(e){e.textContent=fmt(c[k]); e.classList.toggle("neg",c[k]<-0.005)}}
+  const val=it=>it.k?S[it.k]:c[it.auto];
+  STEPS.forEach((st,i)=>{
+    const inn=st.src.reduce((a,s)=>a+val(s),0), out=st.to.reduce((a,t)=>a+val(t),0), diff=Math.round((inn-out)*100)/100;
+    const neg=st.to.some(t=>val(t)<-0.005);
+    const ch=document.getElementById("chk-"+i);
+    ch.textContent=neg?"не хватает денег - проверьте суммы":(diff===0?"распределено полностью":"не распределено "+fmt(diff));
+    ch.classList.toggle("bad",neg||diff!==0);
+  });
+  STEPS.forEach((st,i)=>st.to.forEach((t,ti)=>{ if(!t.term) return;
+    const a=val(t), d=days(S[t.term.from],S[t.term.to]), it=a*S[t.term.rate]/100*d/t.term.b;
+    document.getElementById("from-"+i+"-"+ti).textContent=S[t.term.from];
+    document.getElementById("int-"+i+"-"+ti).innerHTML=d>0?`${d} дн. · проценты ≈ <b>${fmt(Math.round(it))}</b> · к погашению <b>${fmt(Math.round(a+it))}</b>`:'<span class="neg">дата «до» раньше даты размещения</span>';
+  }));
+  const w=document.getElementById("warnrak"); if(w) w.textContent=S.rak2_to!==S.snb8_to?"В Rakbank разные даты погашения 2 млн и 8 млн - 10 млн одной датой не получится":"";
+  document.getElementById("fxrows").innerHTML=c.fx.map(([a,b,t,v])=>`<tr><td>${a} - ${b}${t?" · "+t:""}</td><td>${days(a,b)} дн.</td><td class="${v<0?"neg":""}">${fmt(Math.round(v))}</td><td>${fmt(Math.round(v*3.67))}</td></tr>`).join("");
+  draw();
+}
+function summary(c){
+  const T=[["dep","Rakbank",c.rak10,"до "+S.snb8_to],["dep","ENBD-1",S.enbd1,"до "+S.enbd1_to],["dep","ENBD-2",S.enbd2,"до "+S.enbd2_to],
+    ["dep","Дельта",c.delta,"до "+S.delta_to],["in","Алготория в торговле",S.alg_keep,"субсчет OKX"],["out","ФХД на 31.05.2027",c.fhd_end,"резерв и расходы до 18.06"],["out","Дивиденды и налог",S.div+S.tax,"выплаты 2027 года"]];
+  document.getElementById("summary").innerHTML=T.map(([t,n,v,d])=>`<div class="tile ${t}"><div class="t">${n}</div><div class="v ${v<0?"neg":""}">${mln(v)}</div><div class="d">${d}</div></div>`).join("");
+}
+function draw(){
+  const c=calc();
+  STEPS.forEach((st,i)=>{
+    const g=document.getElementById("g-"+i), svg=g.querySelector("svg"), gb=g.getBoundingClientRect();
+    if(getComputedStyle(svg).display==="none") return;
+    const srcs=[...g.querySelectorAll('[data-role="src"]')], dsts=[...g.querySelectorAll('[data-role="dst"]')];
+    const vals=st.to.map(t=>Math.max(0,t.k?S[t.k]:c[t.auto])), sv=st.src.map(s=>Math.max(0,s.k?S[s.k]:c[s.auto]));
+    const total=sv.reduce((a,b)=>a+b,0)||1, maxW=Math.min(46,Math.max(18,srcs.reduce((a,s)=>a+s.offsetHeight,0)*0.45));
+    const col={dep:"--dep",out:"--out",pool:"--pool",in:"--in"};
+    let paths="";
+    srcs.forEach((s,si)=>{
+      const sb=s.getBoundingClientRect(), x1=sb.right-gb.left, share=sv[si]/total;
+      let y=sb.top-gb.top+sb.height/2;
+      dsts.forEach((d,di)=>{
+        const db=d.getBoundingClientRect(), x2=db.left-gb.left, y2=db.top-gb.top+db.height/2;
+        const v=vals[di]*(st.src.length>1?share:1); if(v<=0) return;
+        const w=Math.max(2,maxW*v/total), mx=(x1+x2)/2;
+        const color=getComputedStyle(document.documentElement).getPropertyValue(col[st.to[di].t]).trim();
+        paths+=`<path d="M${x1} ${y} C${mx} ${y}, ${mx} ${y2}, ${x2} ${y2}" fill="none" stroke="${color}" stroke-opacity=".38" stroke-width="${w.toFixed(1)}" stroke-linecap="butt"/>`;
+      });
+    });
+    svg.innerHTML=paths;
+  });
+}
+document.addEventListener("input",e=>{
+  const k=e.target.dataset&&e.target.dataset.k; if(!k) return;
+  S[k]=e.target.dataset.date?e.target.value:num(e.target.value); save(); update();
+});
+document.addEventListener("focusout",e=>{if(e.target.dataset&&e.target.dataset.k) fill()});
+
+window.addEventListener("resize",draw);
+let TX={}; try{TX=JSON.parse(localStorage.getItem("bha-dds-text")||"{}")}catch(e){}
+document.querySelectorAll("[data-tid]").forEach(el=>{ if(TX[el.dataset.tid]!=null) el.textContent=TX[el.dataset.tid];
+  el.addEventListener("input",()=>{TX[el.dataset.tid]=el.textContent; try{localStorage.setItem("bha-dds-text",JSON.stringify(TX))}catch(e){} draw();});
+  el.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault(); el.blur();}});
+});
+fill(); update();
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(draw);
+</script>
+</body>
+</html>
